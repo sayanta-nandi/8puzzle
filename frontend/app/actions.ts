@@ -7,7 +7,7 @@ type response = {
 };
 
 export const solvePuzzle = async ({ arr }: { arr: number[][] }) => {
-  const res = await fetch("http://localhost:8080/api/path", {
+  const res = await fetch("https://eightpuzzle-wwpx.onrender.com/api/path", {
     method: "post",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

@@ -26,3 +26,7 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+springBoot {
+    mainClass.set("com.example.puzzle_solver.PuzzleSolverApplication")
+}
