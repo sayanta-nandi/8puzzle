@@ -20,6 +20,6 @@ export function constructMetadata({
       images: [{ url: image }],
     },
     icons,
-    metadataBase: new URL("https://casecobra-tau-six.vercel.app/"),
+    metadataBase: new URL("https://8puzzle-two.vercel.app/"),
   };
 }
