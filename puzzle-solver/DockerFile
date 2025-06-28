@@ -1,12 +1,35 @@
-# Use official Gradle image
-FROM gradle:8.4-jdk17 AS builder
-WORKDIR /app
-COPY . .
-RUN gradle build --no-daemon
+# Stage 1: Build the application using Gradle Wrapper
+FROM eclipse-temurin:17-jdk AS builder
 
-# Use JDK image for final run
-FROM eclipse-temurin:17-jdk
+# Set working directory inside container
 WORKDIR /app
+
+# Copy only Gradle wrapper and build config files first (for caching)
+COPY backend/gradlew backend/gradlew.bat backend/settings.gradle backend/build.gradle /app/
+
+# Copy Gradle wrapper folder (for bootstrapping Gradle)
+COPY backend/gradle /app/gradle
+
+# Run a dummy build to cache dependencies (optional, speeds up future builds)
+RUN ./gradlew build -x test --no-daemon || true
+
+# Copy the rest of the source files
+COPY backend/src /app/src
+
+# Now do the actual build
+RUN ./gradlew build -x test --no-daemon
+
+# Stage 2: Create a lightweight image to run the app
+FROM eclipse-temurin:17-jre
+
+# Set working directory inside container
+WORKDIR /app
+
+# Copy built jar from builder stage
 COPY --from=builder /app/build/libs/*.jar app.jar
+
+# Expose the port the app runs on
 EXPOSE 8080
+
+# Run the app
 ENTRYPOINT ["java", "-jar", "app.jar"]
