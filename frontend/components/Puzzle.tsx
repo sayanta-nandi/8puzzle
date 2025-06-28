@@ -230,9 +230,11 @@ const Puzzle = () => {
           )
         ) : null}
       </div>
-      <button disabled={isPending} onClick={() => solve()}>
-        {isPending ? "Solving..." : "Solve by computer"}
-      </button>
+      {!editable && (
+        <button disabled={isPending} onClick={() => solve()}>
+          {isPending ? "Solving..." : "Solve by computer"}
+        </button>
+      )}
     </div>
   );
 };
