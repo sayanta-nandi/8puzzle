@@ -5,16 +5,16 @@ FROM eclipse-temurin:17-jdk AS builder
 WORKDIR /app
 
 # Copy only Gradle wrapper and build config files first (for caching)
-COPY puzzle-solver/gradlew puzzle-solver/gradlew.bat puzzle-solver/settings.gradle puzzle-solver/build.gradle /app/
+COPY gradlew gradlew.bat settings.gradle build.gradle /app/
 
 # Copy Gradle wrapper folder (for bootstrapping Gradle)
-COPY puzzle-solver/gradle /app/gradle
+COPY gradle /app/gradle
 
 # Run a dummy build to cache dependencies (optional, speeds up future builds)
 RUN ./gradlew build -x test --no-daemon || true
 
 # Copy the rest of the source files
-COPY puzzle-solver/src /app/src
+COPY src /app/src
 
 # Now do the actual build
 RUN ./gradlew build -x test --no-daemon
