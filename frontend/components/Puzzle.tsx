@@ -4,6 +4,7 @@ import { ChangeEvent, useState } from "react";
 import Box from "./Box";
 import { useMutation } from "@tanstack/react-query";
 import { solvePuzzle } from "@/app/actions";
+import Link from "next/link";
 
 const SOLVED_STATE = [
   [1, 2, 3],
@@ -89,8 +90,14 @@ const Puzzle = () => {
   };
 
   return (
-    <div className="flex flex-col items-center space-y-8">
+    <div className="relative flex flex-col items-center space-y-8">
       <h1 className="text-3xl font-semibold text-orange-400">8puzzle</h1>
+      <Link
+        href="https://github.com/sayanta-nandi/8puzzle"
+        className="absolute top-0 right-0"
+      >
+        github
+      </Link>
       <div>
         <div className="flex justify-between">
           <p

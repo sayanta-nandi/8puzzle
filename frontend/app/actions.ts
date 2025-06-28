@@ -6,8 +6,13 @@ type response = {
   moves: number[][][];
 };
 
+const URL =
+  process.env.NODE_ENV === "production"
+    ? "https://eightpuzzle-wwpx.onrender.com/api/path"
+    : "http://localhost:8080/api/path";
+
 export const solvePuzzle = async ({ arr }: { arr: number[][] }) => {
-  const res = await fetch("https://eightpuzzle-wwpx.onrender.com/api/path", {
+  const res = await fetch(URL, {
     method: "post",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
