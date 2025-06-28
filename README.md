@@ -18,7 +18,7 @@ Third, go to frontend in another terminal:
 cd ../frontend
 ```
 
-Fourth, run the development server in another terminal:
+Fourth, run the development server in that terminal:
 
 ```bash
 npm run dev
