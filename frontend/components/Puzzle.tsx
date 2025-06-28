@@ -2,6 +2,8 @@
 
 import { ChangeEvent, useState } from "react";
 import Box from "./Box";
+import { useMutation } from "@tanstack/react-query";
+import { solvePuzzle } from "@/app/actions";
 
 const SOLVED_STATE = [
   [1, 2, 3],
@@ -12,6 +14,17 @@ const SOLVED_STATE = [
 const Puzzle = () => {
   const [arr, setArr] = useState<number[][]>(SOLVED_STATE);
   const [editable, setEditable] = useState<boolean>(false);
+  const [idx, setIdx] = useState<number>(0);
+
+  const {
+    mutate: solve,
+    data,
+    isPending,
+  } = useMutation({
+    mutationKey: ["solve"],
+    mutationFn: async () => await solvePuzzle({ arr }),
+    onSuccess: () => setIdx(0),
+  });
 
   const handleChange = (i: number, j: number, num: number) => {
     setArr((prev) => {
@@ -74,6 +87,7 @@ const Puzzle = () => {
       return curr;
     });
   };
+
   return (
     <div className="flex flex-col items-center space-y-8">
       <h1 className="text-3xl font-semibold text-orange-400">8puzzle</h1>
@@ -177,7 +191,41 @@ const Puzzle = () => {
             j={2}
           />
         </div>
+        {data ? (
+          data.isSolvable ? (
+            <div className="flex gap-2 items-center mt-2">
+              <button
+                className="px-2 bg-gray-300 rounded"
+                onClick={() => {
+                  if (idx > 0) {
+                    setArr(data.moves[idx - 1]);
+                    setIdx((prev) => prev - 1);
+                  }
+                }}
+              >
+                {"<"}
+              </button>
+              <div className="w-4 flex justify-center">{idx}</div>
+              <button
+                className="px-2 bg-gray-300 rounded"
+                onClick={() => {
+                  if (idx < data.moves.length - 1) {
+                    setArr(data.moves[idx + 1]);
+                    setIdx((prev) => prev + 1);
+                  }
+                }}
+              >
+                {">"}
+              </button>
+            </div>
+          ) : (
+            "can not be solved"
+          )
+        ) : null}
       </div>
+      <button disabled={isPending} onClick={() => solve()}>
+        {isPending ? "Solving..." : "Solve by computer"}
+      </button>
     </div>
   );
 };
