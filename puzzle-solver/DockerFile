@@ -10,6 +10,8 @@ COPY gradlew gradlew.bat settings.gradle build.gradle /app/
 # Copy Gradle wrapper folder (for bootstrapping Gradle)
 COPY gradle /app/gradle
 
+RUN chmod +x gradlew
+
 # Run a dummy build to cache dependencies (optional, speeds up future builds)
 RUN ./gradlew build -x test --no-daemon || true
 
